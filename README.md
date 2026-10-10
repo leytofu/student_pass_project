@@ -343,23 +343,6 @@ The interface includes:
 
 The application uses the saved model, so you do not need to train the model every time you open the interface.
 
-## ✅ Project Completion Checklist
-
-- [ ] Created the Python virtual environment.
-- [ ] Installed the required dependencies.
-- [ ] Created `train_model.py`.
-- [ ] Trained and saved the machine learning model.
-- [ ] Reloaded the saved model using Joblib.
-- [ ] Made three predictions without retraining.
-- [ ] Created `app.py`.
-- [ ] Started the Flask API successfully.
-- [ ] Tested a valid API request.
-- [ ] Verified that invalid attendance is rejected.
-- [ ] Created `streamlit_app.py`.
-- [ ] Opened and tested the Streamlit interface.
-
-## 🐛 Troubleshooting
-
 ### 1. Model file not found
 
 **Error:**
@@ -414,27 +397,3 @@ python -m pip install scikit-learn joblib Flask streamlit pandas matplotlib
 ### 6. Streamlit cannot find the model
 
 Make sure you have run `train_model.py` before starting Streamlit and that both files are in the same folder.
-
-## ⚠️ Limitations
-
-- The training dataset is illustrative and intended for practice.
-- The model uses study hours as its only input feature.
-- Attendance percentage is validated by the API but does not affect the prediction.
-- Predictions are not guarantees of actual academic performance.
-- The project is an educational prototype, not a validated student assessment system.
-
-## 🔮 Possible Improvements
-
-- Train the model using both study hours and attendance percentage.
-- Use a larger, realistic, and appropriately authorized dataset.
-- Add prediction confidence or probability.
-- Store prediction history in a database.
-- Improve the user interface.
-- Add automated tests for the API and model.
-- Deploy the application to a hosting platform.
-
-## 👨‍💻 Author
-
-Student Pass Prediction System
-
-**Purpose:** Educational machine learning project demonstrating model persistence, Flask API development, and Streamlit interface development.
