@@ -46,6 +46,12 @@ student-pass-project/
 ├── student_pass_model.joblib
 │   └── Saved machine learning model
 │
+├── requirements.txt
+│   └── Python package dependencies
+│
+├── .postman/
+│   └── Postman workspace configuration (optional, local use only)
+│
 ├── README.md
 │   └── Project documentation
 │
@@ -59,7 +65,7 @@ The `.venv` directory and `student_pass_model.joblib` file are generated locally
 
 Before starting, install:
 
-- Python 3.10 or a compatible Python version supported by the installed packages
+- Python 3.10 or newer (this project is tested with Python 3.12)
 - Visual Studio Code (optional)
 - Windows PowerShell
 
@@ -123,7 +129,24 @@ Upgrade pip:
 python -m pip install --upgrade pip
 ```
 
-Install the required packages:
+Install the required packages from `requirements.txt`:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+`requirements.txt` contains:
+
+```text
+scikit-learn>=1.3
+joblib>=1.3
+Flask>=2.3
+streamlit>=1.28
+pandas>=2.0
+matplotlib>=3.7
+```
+
+Alternatively, you can install the packages directly:
 
 ```powershell
 python -m pip install scikit-learn joblib Flask streamlit pandas matplotlib
@@ -343,6 +366,8 @@ The interface includes:
 
 The application uses the saved model, so you do not need to train the model every time you open the interface.
 
+## 🔧 Troubleshooting
+
 ### 1. Model file not found
 
 **Error:**
@@ -391,9 +416,78 @@ Then run:
 Activate the virtual environment and reinstall the dependencies:
 
 ```powershell
-python -m pip install scikit-learn joblib Flask streamlit pandas matplotlib
+python -m pip install -r requirements.txt
 ```
 
 ### 6. Streamlit cannot find the model
 
 Make sure you have run `train_model.py` before starting Streamlit and that both files are in the same folder.
+
+
+
+### HOW TO RUN - Student Pass Prediction Project
+=============================================
+
+Open PowerShell in the project folder:
+  cd "C:\Users\leych\Wala_Lang\CLO3_ELECT\student-pass-project"
+
+Activate the virtual environment (run this in EVERY terminal you open):
+  .\.venv\Scripts\Activate.ps1
+
+If PowerShell blocks activation, run first:
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+
+STEP 0 - Install dependencies (once only)
+-----------------------------------------
+Terminal: any (run once)
+  python -m pip install -r requirements.txt
+
+
+STEP 1 - Train the model (once, before the apps)
+-------------------------------------------------
+Terminal: Terminal 1
+  python train_model.py
+
+Creates student_pass_model.joblib. Run again only if you delete the model file.
+
+
+STEP 2 - Flask REST API
+-----------------------
+Terminal: Terminal 2 (SEPARATE from Terminal 1)
+  python app.py
+
+API runs at http://127.0.0.1:5000
+Keep this terminal open while testing.
+
+Test it in another terminal (Terminal 3, SEPARATE):
+  .\.venv\Scripts\Activate.ps1
+  $body = @{ study_hours = 5; attendance_percentage = 85 } | ConvertTo-Json
+  Invoke-RestMethod -Uri "http://127.0.0.1:5000/predict" -Method Post -ContentType "application/json" -Body $body
+
+Or open in a browser: http://127.0.0.1:5000
+
+
+STEP 3 - Streamlit web interface
+---------------------------------
+Terminal: Terminal 3 (SEPARATE from the Flask terminal)
+  python -m streamlit run streamlit_app.py
+
+Open http://localhost:8501 in your browser.
+
+
+SUMMARY - how many terminals
+-----------------------------
+Terminal 1: python train_model.py        (run once, then it can be closed)
+Terminal 2: python app.py                (Flask API - keep running)
+Terminal 3: streamlit run streamlit_app.py (Streamlit UI - keep running)
+
+- Step 1 must run BEFORE steps 2 and 3 (the model file must exist).
+- Steps 2 and 3 MUST be in separate terminals, both running at the same time.
+- Steps 2 and 3 must NOT be in the same terminal as step 1 if you still need step 1 there.
+- Each new terminal needs the activate command: .\.venv\Scripts\Activate.ps1
+
+
+STOPPING
+--------
+Press Ctrl + C in the terminal to stop Flask or Streamlit.
